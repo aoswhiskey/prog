@@ -1,0 +1,7 @@
+print_field_descending_difficulty
+
+show
+ 
+clear
+
+exit
