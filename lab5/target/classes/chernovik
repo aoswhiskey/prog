@@ -1,0 +1,273 @@
+import java.sql.SQLOutput;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
+
+import models.*;
+import utility.Console;
+import utility.StandardConsole;
+
+public class Main {
+    static List<LabWork> labworks = new ArrayList<LabWork>();
+    public static void main(String[] args) throws models.Ask.AskBreak {
+        var console = new StandartConsole();
+        labworks.add(models.Ask.askLabWork(console, 100));
+        for (var e: labworks) System.out.println(e);
+    }
+}
+
+class models.Ask {
+    public static class AskBreak extends Exception {}
+
+    public static LabWork askLabWork(Console console, int id) throws AskBreak {
+        try {
+            String name;
+            while (true) {
+                console.print("name: ");
+                name = console.readln().trim();
+                if (name.equals("exit")) throw new AskBreak();
+                if (!name.isEmpty()) break;
+            }
+            var coordinates = askCoordinates(console);
+            int minimalPoint;
+            while (true) {
+                console.print("minimalPoint: ");
+                var line = console.readln().trim();
+                if (!line.equals("")) {
+                    try { minimalPoint = Integer.parseInt(line); if (minimalPoint > 0) break;}
+                    catch (NumberFormatException e) {}
+                }
+            }
+            var difficulty = askDifficulty(console);
+            var author = askAuthor(console);
+            return new LabWork(id, name, coordinates, minimalPoint, difficulty, author);
+        } catch (NoSuchElementException | IllegalStateException e) {
+            console.printError("Ошибка чтения");
+            return null;
+        }
+    }
+
+    public static Coordinates askCoordinates(Console console) throws AskBreak {
+        try {
+            Long x;
+            while (true) {
+                console.print("coordinates.x: ");
+                var line = console.readln().trim();
+                if (line.equals("exit")) throw new AskBreak();
+                if (!line.equals("")) {
+                    try { x = Long.parseLong(line); if (x<=595) break; } catch(NumberFormatException e) { }
+                }
+            }
+            long y;
+            while (true) {
+                console.print("coordinates.y: ");
+                var line = console.readln().trim();
+                if (line.equals("exit")) throw new AskBreak();
+                if (!line.equals("")) {
+                    try { y = Long.parseLong(line); if (y>-974) break; } catch(NumberFormatException e) { }
+                }
+            }
+            return new Coordinates(x, y);
+        } catch (NoSuchElementException | IllegalStateException e) {
+            console.printError("Ошибка чтения");
+            return null;
+        }
+    }
+
+    public static Difficulty askDifficulty(Console console) throws AskBreak {
+        try {
+            Difficulty r;
+            while (true) {
+                console.print("WeaponType ("+Difficulty.names()+"): ");
+                var line = console.readln().trim();
+                if (line.equals("exit")) throw new AskBreak();
+                if (!line.equals("")) {
+                    try {
+                        r = Difficulty.valueOf(line); break;
+                    } catch (NullPointerException | IllegalArgumentException  e) { }
+                } else return null;
+            }
+            return r;
+        } catch (NoSuchElementException | IllegalStateException e) {
+            console.printError("Ошибка чтения");
+            return null;
+        }
+    }
+
+    public static Person askAuthor(Console console) throws AskBreak {
+        try {
+            String name;
+            while (true) {
+                console.print("author.name: ");
+                name = console.readln().trim();
+                if (name.equals("exit")) throw new AskBreak();
+                if (!name.isEmpty()) break;
+            }
+            LocalDateTime birthday; //Поле может быть null
+            while (true) {
+                console.print("author.birthday (Example: " +
+                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME) + " or 2023-03-11): ");
+                var line = console.readln().trim();
+                if (line.equals("exit")) throw new AskBreak();
+                if (line.equals("")) {
+                    birthday = null;
+                    break;
+                }
+                try {
+                    birthday = LocalDateTime.parse(line, DateTimeFormatter.ISO_DATE_TIME);
+                    break;
+                } catch (DateTimeParseException e) {
+                }
+                try {
+                    birthday = LocalDateTime.parse(line + "T00:00:00.0000", DateTimeFormatter.ISO_DATE_TIME);
+                    break;
+                } catch (DateTimeParseException e) {
+                }
+            }
+            Float height; //Поле может быть null, Значение поля должно быть больше 0
+            while (true) {
+                console.print("author.height: ");
+                var line = console.readln().trim();
+                if (line.equals("exit")) throw new AskBreak();
+                if (!line.equals("")) {
+                    try {
+                        height = Float.parseFloat(line);
+                        if (height > 0) break;
+                    } catch (NumberFormatException e) {
+                    }
+                }
+            }
+            var location = askLocation(console); //Поле не может быть null
+            return new Person(name, birthday, height, location);
+        } catch (NoSuchElementException | IllegalStateException e) {
+            console.printError("Ошибка чтения");
+            return null;
+        }
+    }
+    public static Location askLocation(Console console) throws AskBreak {
+            try {
+                Double x;
+                while (true) {
+                    console.print("location.coordinates.x: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            x = Double.parseDouble(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                }
+                Long y;
+                while (true) {
+                    console.print("location.coordinates.y: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            y = Long.parseLong(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                }
+                Integer z;
+                while (true) {
+                    console.print("location.coordinates.z: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            z = Integer.parseInt(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                }
+                String name;
+                while (true) {
+                    console.print("location.name: ");
+                    name = console.readln().trim();
+                    if (name.equals("exit")) throw new AskBreak();
+                    if (!name.isEmpty()) break;
+                }
+                return new Location(x, y, z, name);
+            }
+            catch (NoSuchElementException | IllegalStateException e) {
+                console.printError("Ошибка чтения");
+                return null;
+        }
+
+    }
+}
+
+
+package utility;
+
+import java.util.Scanner;
+import java.lang.IllegalStateException;
+import java.util.NoSuchElementException;
+
+public class StandartConsole implements Console {
+    public static final String P = "$ ";
+    public static Scanner fileScanner = null;
+    public static Scanner defScanner = new Scanner(System.in);
+
+    public void print(Object obj) {
+        System.out.print(obj);
+    }
+
+    public void println(Object obj) {
+        System.out.println(obj);
+    }
+
+    public String readln() throws NoSuchElementException, IllegalStateException {
+        return (fileScanner != null ? fileScanner : defScanner).nextLine();
+    }
+
+    public boolean isCanReadln() throws IllegalStateException {
+        return (fileScanner != null ? fileScanner : defScanner).hasNextLine();
+    }
+
+    public void printError(Object obj) {
+        System.err.println("Error: " + obj);
+    }
+
+    public void printTable(Object elementLeft, Object elementRight) {
+        System.out.printf(" %-35s%-1s%n", elementLeft, elementRight);
+    }
+
+    public void prompt() {
+        print(P);
+    }
+
+    public String getPrompt() {
+        return P;
+    }
+
+    public void selectFileScanner(Scanner scanner) {
+        fileScanner = scanner;
+    }
+
+    public void selectConsoleScanner() {
+        fileScanner = null;
+    }
+}
+
+    public void print(Object obj) {
+        try {
+            Thread.sleep(30); // Задержка 10 миллисекунд (или меньше, в зависимости от необходимости)
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Восстановить состояние прерывания
+        }
+        System.out.print(obj);
+        System.out.flush(); // Убедиться, что стандартный вывод выведен сразу
+    }
+
+
+
