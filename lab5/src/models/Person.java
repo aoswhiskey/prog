@@ -1,4 +1,7 @@
 package models;
+
+import java.time.LocalDateTime;
+
 /**
  * Класс человека.
  */
@@ -27,5 +30,21 @@ public class Person implements Comparable<Person> {
     @Override
     public int compareTo(Person other) {
         return this.name.compareTo(other.name);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
+    public Float getHeight() {
+        return height;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

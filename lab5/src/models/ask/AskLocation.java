@@ -2,6 +2,7 @@ package models.ask;
 
 import models.Location;
 import utility.Console;
+import utility.Interrogator;
 
 import java.util.NoSuchElementException;
 /**
@@ -16,56 +17,72 @@ public class AskLocation {
     public static Location askLocation(Console console) throws AskBreak {
         try {
             Double x;
-            while (true) {
-                console.print("location.coordinates.x: ");
-                var line = console.readln().trim();
-                if (line.equals("exit")) throw new AskBreak();
-                if (!line.equals("")) {
-                    try {
-                        x = Double.parseDouble(line);
-                        break;
-                    } catch (NumberFormatException e) {
-                        console.printError("Введите корректное число.");
+            if (Interrogator.fileMode()) {
+                x = Double.parseDouble(Interrogator.getUserScanner().nextLine().trim());
+            } else {
+                while (true) {
+                    console.print("location.coordinates.x: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            x = Double.parseDouble(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                            console.printError("Введите корректное число.");
+                        }
+                    }else {
+                        console.printError("Координата x не может быть пустой!");
                     }
-                }else {
-                    console.printError("Координата x не может быть пустой!");
                 }
             }
             Long y;
-            while (true) {
-                console.print("location.coordinates.y: ");
-                var line = console.readln().trim();
-                if (line.equals("exit")) throw new AskBreak();
-                if (!line.equals("")) {
-                    try {
-                        y = Long.parseLong(line);
-                        break;
-                    } catch (NumberFormatException e) {
-                        console.printError("Введите корректное число.");
+            if (Interrogator.fileMode()) {
+                y = Long.parseLong(Interrogator.getUserScanner().nextLine().trim());
+            } else {
+                while (true) {
+                    console.print("location.coordinates.y: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            y = Long.parseLong(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                            console.printError("Введите корректное число.");
+                        }
+                    } else {
+                        console.printError("Координата y не может быть пустой!");
                     }
-                } else {
-                    console.printError("Координата y не может быть пустой!");
                 }
             }
             Integer z;
-            while (true) {
-                console.print("location.coordinates.z: ");
-                var line = console.readln().trim();
-                if (line.equals("exit")) throw new AskBreak();
-                if (!line.equals("")) {
-                    try {
-                        z = Integer.parseInt(line);
-                        break;
-                    } catch (NumberFormatException e) {
-                        console.printError("Введите корректное целое число.");
+            if (Interrogator.fileMode()) {
+                z = Integer.parseInt(Interrogator.getUserScanner().nextLine().trim());
+            } else {
+                while (true) {
+                    console.print("location.coordinates.z: ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            z = Integer.parseInt(line);
+                            break;
+                        } catch (NumberFormatException e) {
+                            console.printError("Введите корректное целое число.");
+                        }
+                    } else {
+                        console.printError("Координата z не может быть пустой!");
                     }
-                } else {
-                    console.printError("Координата z не может быть пустой!");
                 }
             }
             String name;
-            console.print("location.name: ");
-            name = console.readln().trim();
+            if (Interrogator.fileMode()) {
+                name = Interrogator.getUserScanner().nextLine().trim();
+            } else {
+                console.print("location.name: ");
+                name = console.readln().trim();
+            }
             if (name.equals("exit")) throw new AskBreak();
             return new Location(x, y, z, name);
         } catch (NoSuchElementException | IllegalStateException e) {

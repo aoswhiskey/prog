@@ -3,7 +3,7 @@
     "id": 1,
     "name": "lab1",
     "coordinates": {
-      "x": 123,
+      "x": "fghjk",
       "y": 123
     },
     "creationDate": "2024-09-12",
@@ -28,7 +28,7 @@
       "x": 123,
       "y": 1234
     },
-    "creationDate": "2024-09-12",
+    "creationDate": "2024-09898-12",
     "minimalPoint": 12.0,
     "difficulty": "HARD",
     "author": {
@@ -47,7 +47,7 @@
     "id": 3,
     "name": "lab3",
     "coordinates": {
-      "x": 12,
+      "x": 1231234,
       "y": 33265
     },
     "creationDate": "2024-09-12",

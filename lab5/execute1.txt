@@ -1,0 +1,7 @@
+print_field_descending_difficulty
+
+remove_at 0
+
+head
+
+execute_script execute.txt

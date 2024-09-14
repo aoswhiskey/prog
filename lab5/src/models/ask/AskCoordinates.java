@@ -2,6 +2,7 @@ package models.ask;
 
 import models.Coordinates;
 import utility.Console;
+import utility.Interrogator;
 
 import java.util.NoSuchElementException;
 /**
@@ -16,37 +17,45 @@ public class AskCoordinates {
     public static Coordinates askCoordinates(Console console) throws AskBreak {
         try {
             Long x;
-            while (true) {
-                console.print("coordinates.x (<= 595): ");
-                var line = console.readln().trim();
-                if (line.equals("exit")) throw new AskBreak();
-                if (!line.equals("")) {
-                    try {
-                        x = Long.parseLong(line);
-                        if (x <= 595) break;
-                        else console.printError("x должно быть меньше или равно 595.");
-                    } catch (NumberFormatException e) {
-                        console.printError("Введите корректное число.");
+            if (Interrogator.fileMode()) {
+                x = Long.parseLong(Interrogator.getUserScanner().nextLine().trim());
+            } else {
+                while (true) {
+                    console.print("coordinates.x (<= 595): ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            x = Long.parseLong(line);
+                            if (x <= 595) break;
+                            else console.printError("x должно быть меньше или равно 595.");
+                        } catch (NumberFormatException e) {
+                            console.printError("Введите корректное число.");
+                        }
+                    } else {
+                        console.printError("Координата x не может быть пустой!");
                     }
-                } else {
-                    console.printError("Координата x не может быть пустой!");
                 }
             }
             long y;
-            while (true) {
-                console.print("coordinates.y (> -974): ");
-                var line = console.readln().trim();
-                if (line.equals("exit")) throw new AskBreak();
-                if (!line.equals("")) {
-                    try {
-                        y = Long.parseLong(line);
-                        if (y > -974) break;
-                        else console.printError("y должно быть больше -974.");
-                    } catch (NumberFormatException e) {
-                        console.printError("Введите корректное число.");
+            if (Interrogator.fileMode()) {
+                y = Long.parseLong(Interrogator.getUserScanner().nextLine().trim());
+            } else {
+                while (true) {
+                    console.print("coordinates.y (> -974): ");
+                    var line = console.readln().trim();
+                    if (line.equals("exit")) throw new AskBreak();
+                    if (!line.equals("")) {
+                        try {
+                            y = Long.parseLong(line);
+                            if (y > -974) break;
+                            else console.printError("y должно быть больше -974.");
+                        } catch (NumberFormatException e) {
+                            console.printError("Введите корректное число.");
+                        }
+                    } else {
+                        console.printError("Координата y не может быть пустой!");
                     }
-                } else {
-                    console.printError("Координата y не может быть пустой!");
                 }
             }
             return new Coordinates(x, y);

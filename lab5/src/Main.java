@@ -12,15 +12,15 @@ public class Main {
         Interrogator.setUserScanner(new Scanner(System.in));
         var console = new StandardConsole();
 
-        if (args.length == 0) {
-            console.println("Введите имя загружаемого файла как аргумент командной строки");
-            System.exit(1);
-        }
+//        if (args.length == 0) {
+//            console.println("Введите имя загружаемого файла как аргумент командной строки");
+//            System.exit(1);
+//        }
 
         console.println("Вечер в хату!");
-//        String FILENAME = "file.json";
+        String FILENAME = "file.json";
 
-        DumpManager dumpManager = new DumpManager(args[0], console);
+        DumpManager dumpManager = new DumpManager(FILENAME, console);
         CollectionManager collectionManager = new CollectionManager(dumpManager);
         CommandManager commandManager = new CommandManager() {{
             register("help", new Help(console, this));

@@ -1,7 +1,7 @@
-print_field_descending_difficulty
+max_by_minimal_point
 
 show
- 
-clear
 
-exit
+save
+
+execute_script execute1.txt

@@ -23,4 +23,14 @@ public class Location {
         info += "\n          Наименование локации: " + name;
         return info;
     }
+
+    public Double getX() {
+        return x;
+    }
+    public Long getY() {
+        return y;
+    }
+    public Integer getZ() {
+        return z;
+    }
 }

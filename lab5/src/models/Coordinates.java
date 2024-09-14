@@ -15,4 +15,12 @@ public class Coordinates {
     public String toString() {
         return "(" + x + "; " + y + ")";
     }
+
+    public Long getX() {
+        return x;
+    }
+
+    public long getY() {
+        return y;
+    }
 }

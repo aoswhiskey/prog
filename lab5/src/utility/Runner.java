@@ -2,10 +2,7 @@ package utility;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 import exceptions.ScriptRecursionException;
 import managers.CommandManager;
@@ -20,7 +17,7 @@ public class Runner {
 
     private final Console console;
     private final CommandManager commandManager;
-    private final List<String> scriptStack = new ArrayList<>();
+    private final Set<String> scriptStack = new HashSet<>();
 
     public Runner(Console console, CommandManager commandManager) {
         this.console = console;
@@ -75,8 +72,8 @@ public class Runner {
                 }
                 console.println(console.getPrompt() + String.join(" ", userCommand));
                 if (userCommand[0].equals("execute_script")) {
-                    for (String script : scriptStack) {
-                        if (userCommand[1].equals(script)) throw new ScriptRecursionException();
+                    if (scriptStack.contains(userCommand[1])) {
+                        throw new ScriptRecursionException();
                     }
                 }
                 commandStatus = launchCommand(userCommand);
@@ -86,7 +83,7 @@ public class Runner {
             Interrogator.setUserMode();
 
             if (commandStatus == ExitCode.ERROR && (!userCommand[0].equals("execute_script") || userCommand[1].isEmpty())) {
-                console.println("Скрипт содержит некорректные данные или исполнение программы было прервано!");
+                console.println("Скрипт содержит некорректные данные!");
             }
 
             return commandStatus;
@@ -103,7 +100,7 @@ public class Runner {
         } catch (AskBreak e) {
             throw new RuntimeException(e);
         } finally {
-            scriptStack.remove(scriptStack.size() - 1);
+            scriptStack.remove(argument);;
         }
         return ExitCode.ERROR;
     }
