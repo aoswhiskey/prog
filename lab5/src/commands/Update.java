@@ -37,7 +37,7 @@ public class Update extends Command {
 
             console.println("* Введите данные обновленного продукта:");
 
-            LabWork newLabWork = AskLabWork.askLabWork(console, collectionManager.getFreeId());
+            LabWork newLabWork = AskLabWork.askLabWork(console, id);
             collectionManager.update(newLabWork);
 
             console.println("Продукт успешно обновлен.");

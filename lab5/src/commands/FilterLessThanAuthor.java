@@ -38,7 +38,7 @@ public class FilterLessThanAuthor extends Command {
             for (var e : collectionManager.getCollection()) {
                 if (e.getAuthor().compareTo(author) < 0) labWorks.add(e);
             }
-            if (labWorks == null) {
+            if (labWorks.isEmpty()) {
                 console.println("Лабораторных работ не обнаружено.");
             }
             else {
